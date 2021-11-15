@@ -88,25 +88,32 @@ namespace damajatek_KKG_SZR_LA
             PictureBox klikkelt = sender as PictureBox;
             int sor = Convert.ToInt32(klikkelt.Name.Split('_')[0]);
             int oszlop = Convert.ToInt32(klikkelt.Name.Split('_')[1]);
+            bool asd = false;
 
 
-            if (klikkelt.Image != null)
+
+            if (asd == false)
             {
-                if(jelenlegiSzin == klikkelt.Name.Split('_')[2])
+                if (klikkelt.Image != null)
                 {
-                    aktBabu.Name = klikkelt.Name;
-                    aktBabu.Image = klikkelt.Image;
-                }
-                else
-                {
-                    MessageBox.Show("Nem te vagy a soron lévő játékos!");
+                    if (jelenlegiSzin == klikkelt.Name.Split('_')[2])
+                    {
+                        aktBabu.Name = klikkelt.Name;
+                        aktBabu.Image = klikkelt.Image;
+                        MessageBox.Show(klikkelt.Name);
+                        asd = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Nem te vagy a soron lévő játékos!");
+                    }
                 }
             }
-
-            if (klikkelt.Image == null)
+            else if (asd == true)
             {
-
+                MessageBox.Show(klikkelt.Name);
             }
+
         }
 
         private void gombeltuntetes()
