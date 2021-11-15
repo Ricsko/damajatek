@@ -14,6 +14,8 @@ namespace damajatek_KKG_SZR_LA
     {
         static string nev1 = "";
         static string nev2 = "";
+        static string jelenlegiSzin = "fekete";
+        static PictureBox aktBabu;
 
         static PictureBox[,] jatekter = new PictureBox[8, 8];
 
@@ -57,7 +59,7 @@ namespace damajatek_KKG_SZR_LA
                     palya.Size = new Size(50, 50);
                     palya.Location = new Point(x + 6, y);
                     palya.Name = $"{i}_{j}";
-                    //palya.MouseClick += new MouseEventHandler(mozgatasClick);
+                    palya.MouseClick += new MouseEventHandler(mozgatasClick);
                     if ((i + j) % 2 == 0)
                     {
                         palya.BackColor = Color.FromArgb(255, 216, 176);
@@ -75,9 +77,36 @@ namespace damajatek_KKG_SZR_LA
                 x = 150;
                 y += 50;
             }
+            aktBabu = new PictureBox();
 
             gombeltuntetes();
             babuk();
+        }
+
+        private void mozgatasClick(object sender, MouseEventArgs e)
+        {
+            PictureBox klikkelt = sender as PictureBox;
+            int sor = Convert.ToInt32(klikkelt.Name.Split('_')[0]);
+            int oszlop = Convert.ToInt32(klikkelt.Name.Split('_')[1]);
+
+
+            if (klikkelt.Image != null)
+            {
+                if(jelenlegiSzin == klikkelt.Name.Split('_')[2])
+                {
+                    aktBabu.Name = klikkelt.Name;
+                    aktBabu.Image = klikkelt.Image;
+                }
+                else
+                {
+                    MessageBox.Show("Nem te vagy a soron lévő játékos!");
+                }
+            }
+
+            if (klikkelt.Image == null)
+            {
+
+            }
         }
 
         private void gombeltuntetes()
@@ -100,6 +129,7 @@ namespace damajatek_KKG_SZR_LA
                     if ((i + j) % 2 == 0)
                     {
                         jatekter[i, j].Image = imagelist.Images[0];
+                        jatekter[i, j].Name += "_fekete";
                     }
                 }
             }
@@ -112,6 +142,7 @@ namespace damajatek_KKG_SZR_LA
                     if ((i + j) % 2 == 0)
                     {
                         jatekter[i, j].Image = imagelist.Images[1];
+                        jatekter[i, j].Name += "_feher";
                     }
                 }
             }
