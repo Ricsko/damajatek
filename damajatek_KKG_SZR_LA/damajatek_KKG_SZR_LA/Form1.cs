@@ -14,7 +14,8 @@ namespace damajatek_KKG_SZR_LA
     {
         static string nev1 = "";
         static string nev2 = "";
-        static string jelenlegiSzin = "fekete";
+        static int startIndex = 0;
+        static string[] szin = new string[] { "fekete", "feher" };
         static PictureBox aktBabu;
 
         static PictureBox[,] jatekter = new PictureBox[8, 8];
@@ -67,6 +68,7 @@ namespace damajatek_KKG_SZR_LA
                     else
                     {
                         palya.BackColor = Color.FromArgb(69, 40, 36);
+                        palya.Enabled = false;
                     }
                     this.Controls.Add(palya);
                     jatekter[i, j] = palya;
@@ -86,34 +88,57 @@ namespace damajatek_KKG_SZR_LA
         private void mozgatasClick(object sender, MouseEventArgs e)
         {
             PictureBox klikkelt = sender as PictureBox;
-            int sor = Convert.ToInt32(klikkelt.Name.Split('_')[0]);
-            int oszlop = Convert.ToInt32(klikkelt.Name.Split('_')[1]);
-            bool asd = false;
+            string aktszin = szin[startIndex];
+            int col = Convert.ToInt32(klikkelt.Name.Split('_')[0]);
+            int row = Convert.ToInt32(klikkelt.Name.Split('_')[1]);
 
+            //SORON LÉVŐ JÁTÉKOS ELLENÖRZÉS SZÍN!!
 
-
-            if (asd == false)
+            if (klikkelt.Image != null)
             {
-                if (klikkelt.Image != null)
+                if (klikkelt.Name == aktBabu.Name)
                 {
-                    if (jelenlegiSzin == klikkelt.Name.Split('_')[2])
+                    aktBabu.Image = null;
+                    aktBabu.Name = "";
+                    jatekter[col, row].BackColor = Color.FromArgb(255, 216, 176);
+                }
+                else
+                {
+                    aktBabu.Name = klikkelt.Name;
+                    aktBabu.Image = klikkelt.Image;
+                    jatekter[col, row].BackColor = Color.Green;
+                }
+                
+            }
+            else if (aktBabu.Image == null)
+            {
+                MessageBox.Show("Nincs kiválasztott bábú!");
+            }
+            else if (klikkelt.Image == null && aktBabu.Image != null)
+            {
+                klikkelt.Image = aktBabu.Image;
+                klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
+                
+                for (int i = 0; i < 8; i++)
+                {
+                    for (int j = 0; j < 8; j++)
                     {
-                        aktBabu.Name = klikkelt.Name;
-                        aktBabu.Image = klikkelt.Image;
-                        MessageBox.Show(klikkelt.Name);
-                        asd = true;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Nem te vagy a soron lévő játékos!");
+                        if (jatekter[i, j].Name == aktBabu.Name)
+                        {
+                            jatekter[i, j].Name = $"{i}_{j}";
+                            jatekter[i, j].Image = null;
+                            jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
+                        }
                     }
                 }
+                
+                aktBabu.Image = null;
+                aktBabu.Name = "";
+                startIndex++;
             }
-            else if (asd == true)
-            {
-                MessageBox.Show(klikkelt.Name);
-            }
-
+            //AKTUÁLIS SZÍN
+            startIndex = startIndex % 2;
+            MessageBox.Show(aktszin);
         }
 
         private void gombeltuntetes()
