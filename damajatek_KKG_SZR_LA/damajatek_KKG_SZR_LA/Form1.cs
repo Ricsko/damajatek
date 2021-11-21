@@ -139,29 +139,7 @@ namespace damajatek_KKG_SZR_LA
                     //Egyszerű lépés
                     if (aktBabuRow - ujPozRow == -1 && aktBabuCol - ujPozCol == -1 || aktBabuCol - ujPozCol == 1)
                     {
-                        klikkelt.Image = aktBabu.Image;
-                        klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
-
-                        for (int i = 0; i < 8; i++)
-                        {
-                            for (int j = 0; j < 8; j++)
-                            {
-                                if (jatekter[i, j].Name == aktBabu.Name)
-                                {
-                                    jatekter[i, j].Name = $"{i}_{j}";
-                                    jatekter[i, j].Image = null;
-                                    jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
-                                }
-                            }
-                        }
-
-                        aktBabu.Image = null;
-                        aktBabu.Name = "";
-                        startIndex++;
-                    }
-                    else if (aktBabuRow - ujPozRow == -2)
-                    {
-                        MessageBox.Show("Ilyen lépés nem lehetséges!");
+                        feketeLepes(aktBabuRow, aktBabuCol, ujPozRow, ujPozCol, klikkelt, aktszin);
                     }
                     //Bal => jobb átlós ütés
                     else if (jatekter[ujPozRow - 1, ujPozCol - 1].Image == null)
@@ -195,6 +173,7 @@ namespace damajatek_KKG_SZR_LA
 
                         }
                     }
+                    //Jobb => bal átlós ütés
                     else if (jatekter[aktBabuRow, aktBabuCol].Name.Split('_')[2] != jatekter[ujPozRow - 1, ujPozCol - 1].Name.Split('_')[2])
                     {
                         if (jatekter[ujPozRow - 1, ujPozCol - 1].Image != null)
@@ -223,8 +202,6 @@ namespace damajatek_KKG_SZR_LA
                         }
 
                     }
-
-                    //Jobb => bal átlós ütés
                     else
                     {
                         MessageBox.Show($"Ide nem léphetsz!");
@@ -237,29 +214,7 @@ namespace damajatek_KKG_SZR_LA
                     //Egyszerű lépés
                     if (aktBabuRow - ujPozRow == 1 && aktBabuCol - ujPozCol == 1 || aktBabuCol - ujPozCol == -1)
                     {
-                        klikkelt.Image = aktBabu.Image;
-                        klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
-
-                        for (int i = 0; i < 8; i++)
-                        {
-                            for (int j = 0; j < 8; j++)
-                            {
-                                if (jatekter[i, j].Name == aktBabu.Name)
-                                {
-                                    jatekter[i, j].Name = $"{i}_{j}";
-                                    jatekter[i, j].Image = null;
-                                    jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
-                                }
-                            }
-                        }
-
-                        aktBabu.Image = null;
-                        aktBabu.Name = "";
-                        startIndex++;
-                    }
-                    else if (aktBabuRow - ujPozRow == 2)
-                    {
-                        MessageBox.Show("Ilyen lépés nem lehetséges!");
+                        feherLepes(aktBabuRow, aktBabuCol, ujPozRow, ujPozCol, klikkelt, aktszin);
                     }
                     //Bal => jobb átló ütés
                     else if (jatekter[ujPozRow - 1, ujPozCol + 1].Image != null)
@@ -381,6 +336,60 @@ namespace damajatek_KKG_SZR_LA
         private void szabalyok_BTN_Click(object sender, EventArgs e)
         {
             richTextBox1.Visible = true;
+        }
+
+
+
+
+
+
+
+
+
+        private void feketeLepes(int aktBabuRow, int aktBabuCol, int ujPozRow, int ujPozCol, PictureBox klikkelt, string aktszin)
+        {
+            klikkelt.Image = aktBabu.Image;
+            klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
+
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (jatekter[i, j].Name == aktBabu.Name)
+                    {
+                        jatekter[i, j].Name = $"{i}_{j}";
+                        jatekter[i, j].Image = null;
+                        jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
+                    }
+                }
+            }
+
+            aktBabu.Image = null;
+            aktBabu.Name = "";
+            startIndex++;
+        }
+
+        private void feherLepes(int aktBabuRow, int aktBabuCol, int ujPozRow, int ujPozCol, PictureBox klikkelt, string aktszin)
+        {
+            klikkelt.Image = aktBabu.Image;
+            klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
+
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (jatekter[i, j].Name == aktBabu.Name)
+                    {
+                        jatekter[i, j].Name = $"{i}_{j}";
+                        jatekter[i, j].Image = null;
+                        jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
+                    }
+                }
+            }
+
+            aktBabu.Image = null;
+            aktBabu.Name = "";
+            startIndex++;
         }
     }
 }
