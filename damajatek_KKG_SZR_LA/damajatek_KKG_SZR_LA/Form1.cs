@@ -89,26 +89,26 @@ namespace damajatek_KKG_SZR_LA
         {
             PictureBox klikkelt = sender as PictureBox;
             string aktszin = szin[startIndex];
-            int col = Convert.ToInt32(klikkelt.Name.Split('_')[0]);
-            int row = Convert.ToInt32(klikkelt.Name.Split('_')[1]);
-
-            //SORON LÉVŐ JÁTÉKOS ELLENÖRZÉS SZÍN!!
 
             if (klikkelt.Image != null)
             {
+                //AKTUÁLIS SZÍN / JÁTÉKOS
                 if(aktszin == klikkelt.Name.Split('_')[2])
                 {
+                    int row = Convert.ToInt32(klikkelt.Name.Split('_')[0]);
+                    int col = Convert.ToInt32(klikkelt.Name.Split('_')[1]);
+
                     if (klikkelt.Name == aktBabu.Name)
                     {
                         aktBabu.Image = null;
                         aktBabu.Name = "";
-                        jatekter[col, row].BackColor = Color.FromArgb(255, 216, 176);
+                        jatekter[row, col].BackColor = Color.FromArgb(255, 216, 176);
                     }
                     else
                     {
                         aktBabu.Name = klikkelt.Name;
                         aktBabu.Image = klikkelt.Image;
-                        jatekter[col, row].BackColor = Color.Green;
+                        jatekter[row, col].BackColor = Color.Green;
                     }
                 }
                 else
@@ -123,25 +123,62 @@ namespace damajatek_KKG_SZR_LA
             }
             else if (klikkelt.Image == null && aktBabu.Image != null)
             {
-                klikkelt.Image = aktBabu.Image;
-                klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
+                //LÉPTETÉS
+                int aktBabuRow = Convert.ToInt32(aktBabu.Name.Split('_')[0]);
+                int aktBabuCol = Convert.ToInt32(aktBabu.Name.Split('_')[1]);
+                int ujPozRow = Convert.ToInt32(klikkelt.Name.Split('_')[0]);
+                int ujPozCol = Convert.ToInt32(klikkelt.Name.Split('_')[1]);
 
-                for (int i = 0; i < 8; i++)
+                if (startIndex%2==0 && ujPozRow > aktBabuRow)
                 {
-                    for (int j = 0; j < 8; j++)
+                    klikkelt.Image = aktBabu.Image;
+                    klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
+
+
+                    for (int i = 0; i < 8; i++)
                     {
-                        if (jatekter[i, j].Name == aktBabu.Name)
+                        for (int j = 0; j < 8; j++)
                         {
-                            jatekter[i, j].Name = $"{i}_{j}";
-                            jatekter[i, j].Image = null;
-                            jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
+                            if (jatekter[i, j].Name == aktBabu.Name)
+                            {
+                                jatekter[i, j].Name = $"{i}_{j}";
+                                jatekter[i, j].Image = null;
+                                jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
+                            }
                         }
                     }
-                }
 
-                aktBabu.Image = null;
-                aktBabu.Name = "";
-                startIndex++;
+                    aktBabu.Image = null;
+                    aktBabu.Name = "";
+                    startIndex++;
+                }
+                else if (startIndex % 2 != 0 && ujPozRow < aktBabuRow)
+                {
+                    klikkelt.Image = aktBabu.Image;
+                    klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
+
+
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            if (jatekter[i, j].Name == aktBabu.Name)
+                            {
+                                jatekter[i, j].Name = $"{i}_{j}";
+                                jatekter[i, j].Image = null;
+                                jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
+                            }
+                        }
+                    }
+
+                    aktBabu.Image = null;
+                    aktBabu.Name = "";
+                    startIndex++;
+                }
+                else
+                {
+                    MessageBox.Show("Vissza nem tudsz lépni!");
+                }
             }
             //AKTUÁLIS SZÍN
             startIndex = startIndex % 2;
