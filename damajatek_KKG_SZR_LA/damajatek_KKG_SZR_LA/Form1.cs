@@ -93,7 +93,7 @@ namespace damajatek_KKG_SZR_LA
             if (klikkelt.Image != null)
             {
                 //AKTUÁLIS SZÍN / JÁTÉKOS
-                if (aktszin == klikkelt.Name.Split('_')[2])
+                if(aktszin == klikkelt.Name.Split('_')[2])
                 {
                     int row = Convert.ToInt32(klikkelt.Name.Split('_')[0]);
                     int col = Convert.ToInt32(klikkelt.Name.Split('_')[1]);
@@ -104,7 +104,7 @@ namespace damajatek_KKG_SZR_LA
                         aktBabu.Name = "";
                         jatekter[row, col].BackColor = Color.FromArgb(255, 216, 176);
                     }
-                    else if (aktBabu.Name != "")
+                    else if(aktBabu.Name != "")
                     {
                         MessageBox.Show($"Már van kiválasztott bábú! \n Kattints újra a kiválasztott bábúdra!");
                     }
@@ -136,70 +136,42 @@ namespace damajatek_KKG_SZR_LA
                 //Fekete léptetés - átló
                 if (startIndex % 2 == 0 && ujPozRow > aktBabuRow)
                 {
-                    if (aktBabuRow - ujPozRow != -2)
+                    //Egyszerű lépés
+                    if (aktBabuRow - ujPozRow == -1 && aktBabuCol - ujPozCol == -1 || aktBabuCol - ujPozCol == 1)
                     {
-                        //Egyszerű lépés
-                        if (aktBabuRow - ujPozRow == -1 && aktBabuCol - ujPozCol == -1 || aktBabuCol - ujPozCol == 1)
-                        {
-                            klikkelt.Image = aktBabu.Image;
-                            klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
+                        klikkelt.Image = aktBabu.Image;
+                        klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
 
-                            for (int i = 0; i < 8; i++)
+                        for (int i = 0; i < 8; i++)
+                        {
+                            for (int j = 0; j < 8; j++)
                             {
-                                for (int j = 0; j < 8; j++)
+                                if (jatekter[i, j].Name == aktBabu.Name)
                                 {
-                                    if (jatekter[i, j].Name == aktBabu.Name)
-                                    {
-                                        jatekter[i, j].Name = $"{i}_{j}";
-                                        jatekter[i, j].Image = null;
-                                        jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
-                                    }
+                                    jatekter[i, j].Name = $"{i}_{j}";
+                                    jatekter[i, j].Image = null;
+                                    jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
                                 }
                             }
-
-                            aktBabu.Image = null;
-                            aktBabu.Name = "";
-                            startIndex++;
                         }
 
-                        //Bal => jobb átlós ütés
-                        else if (jatekter[ujPozRow - 1, ujPozCol - 1].Image == null)
+                        aktBabu.Image = null;
+                        aktBabu.Name = "";
+                        startIndex++;
+                    }
+                    else if (aktBabuRow - ujPozRow == -2)
+                    {
+                        MessageBox.Show("Ilyen lépés nem lehetséges!");
+                    }
+                    //Bal => jobb átlós ütés
+                    else if (jatekter[ujPozRow - 1, ujPozCol - 1].Image == null)
+                    {
+                        if (jatekter[aktBabuRow, aktBabuCol].Name.Split('_')[2] != jatekter[ujPozRow + 1, ujPozCol - 1].Name.Split('_')[2])
                         {
-                            if (jatekter[aktBabuRow, aktBabuCol].Name.Split('_')[2] != jatekter[ujPozRow + 1, ujPozCol - 1].Name.Split('_')[2])
+                            if (jatekter[ujPozRow - 1, ujPozCol + 1].Image != null)
                             {
-                                if (jatekter[ujPozRow - 1, ujPozCol + 1].Image != null)
-                                {
-                                    jatekter[ujPozRow - 1, ujPozCol + 1].Name = $"{Convert.ToString(ujPozRow - 1)}_{Convert.ToString(ujPozCol + 1)}";
-                                    jatekter[ujPozRow - 1, ujPozCol + 1].Image = null;
-
-                                    jatekter[ujPozRow, ujPozCol].Name = $"{ujPozRow}_{ujPozCol}_{szin[startIndex]}";
-                                    jatekter[ujPozRow, ujPozCol].Image = aktBabu.Image;
-
-                                    for (int i = 0; i < 8; i++)
-                                    {
-                                        for (int j = 0; j < 8; j++)
-                                        {
-                                            if (jatekter[i, j].Name == aktBabu.Name)
-                                            {
-                                                jatekter[i, j].Name = $"{i}_{j}";
-                                                jatekter[i, j].Image = null;
-                                                jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
-                                            }
-                                        }
-                                    }
-                                    aktBabu.Image = null;
-                                    aktBabu.Name = "";
-                                    startIndex++;
-                                }
-
-                            }
-                        }
-                        else if (jatekter[aktBabuRow, aktBabuCol].Name.Split('_')[2] != jatekter[ujPozRow - 1, ujPozCol - 1].Name.Split('_')[2])
-                        {
-                            if (jatekter[ujPozRow - 1, ujPozCol - 1].Image != null)
-                            {
-                                jatekter[ujPozRow - 1, ujPozCol - 1].Name = $"{Convert.ToString(ujPozRow - 1)}_{Convert.ToString(ujPozCol - 1)}";
-                                jatekter[ujPozRow - 1, ujPozCol - 1].Image = null;
+                                jatekter[ujPozRow - 1, ujPozCol + 1].Name = $"{Convert.ToString(ujPozRow - 1)}_{Convert.ToString(ujPozCol + 1)}";
+                                jatekter[ujPozRow - 1, ujPozCol + 1].Image = null;
 
                                 jatekter[ujPozRow, ujPozCol].Name = $"{ujPozRow}_{ujPozCol}_{szin[startIndex]}";
                                 jatekter[ujPozRow, ujPozCol].Image = aktBabu.Image;
@@ -222,28 +194,16 @@ namespace damajatek_KKG_SZR_LA
                             }
 
                         }
+                    }
+                    else if (jatekter[aktBabuRow, aktBabuCol].Name.Split('_')[2] != jatekter[ujPozRow - 1, ujPozCol - 1].Name.Split('_')[2])
+                    {
+                        if (jatekter[ujPozRow - 1, ujPozCol - 1].Image != null)
+                        {
+                            jatekter[ujPozRow - 1, ujPozCol - 1].Name = $"{Convert.ToString(ujPozRow - 1)}_{Convert.ToString(ujPozCol - 1)}";
+                            jatekter[ujPozRow - 1, ujPozCol - 1].Image = null;
 
-                        //Jobb => bal átlós ütés
-                        else
-                        {
-                            MessageBox.Show($"Ide nem léphetsz!");
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Ilyen lépés nem lehetséges!");
-                    }
-                }
-                //Fehér léptetés - átló
-                else if (startIndex % 2 != 0 && ujPozRow < aktBabuRow)
-                {
-                    if (aktBabuRow - ujPozRow != 2)
-                    {
-                        //Egyszerű lépés
-                        if (aktBabuRow - ujPozRow == 1 && aktBabuCol - ujPozCol == 1 || aktBabuCol - ujPozCol == -1)
-                        {
-                            klikkelt.Image = aktBabu.Image;
-                            klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
+                            jatekter[ujPozRow, ujPozCol].Name = $"{ujPozRow}_{ujPozCol}_{szin[startIndex]}";
+                            jatekter[ujPozRow, ujPozCol].Image = aktBabu.Image;
 
                             for (int i = 0; i < 8; i++)
                             {
@@ -257,86 +217,116 @@ namespace damajatek_KKG_SZR_LA
                                     }
                                 }
                             }
-
                             aktBabu.Image = null;
                             aktBabu.Name = "";
                             startIndex++;
                         }
-                        //Bal => jobb átló ütés
-                        else if (jatekter[ujPozRow - 1, ujPozCol + 1].Image != null)
+
+                    }
+
+                    //Jobb => bal átlós ütés
+                    else
+                    {
+                        MessageBox.Show($"Ide nem léphetsz!");
+                    }
+                }
+
+                //Fehér léptetés - átló
+                else if (startIndex % 2 != 0 && ujPozRow < aktBabuRow)
+                {
+                    //Egyszerű lépés
+                    if (aktBabuRow - ujPozRow == 1 && aktBabuCol - ujPozCol == 1 || aktBabuCol - ujPozCol == -1)
+                    {
+                        klikkelt.Image = aktBabu.Image;
+                        klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
+
+                        for (int i = 0; i < 8; i++)
                         {
-                            if (jatekter[aktBabuRow, aktBabuCol].Name.Split('_')[2] != jatekter[ujPozRow - 1, ujPozCol + 1].Name.Split('_')[2])
+                            for (int j = 0; j < 8; j++)
                             {
-                                if (jatekter[ujPozRow, ujPozCol].Image == null)
+                                if (jatekter[i, j].Name == aktBabu.Name)
                                 {
-                                    jatekter[ujPozRow + 1, ujPozCol - 1].Name = $"{Convert.ToString(ujPozRow + 1)}_{Convert.ToString(ujPozCol - 1)}";
-                                    jatekter[ujPozRow + 1, ujPozCol - 1].Image = null;
-
-                                    jatekter[ujPozRow, ujPozCol].Name = $"{ujPozRow}_{ujPozCol}_{szin[startIndex]}";
-                                    jatekter[ujPozRow, ujPozCol].Image = aktBabu.Image;
-
-                                    for (int i = 0; i < 8; i++)
-                                    {
-                                        for (int j = 0; j < 8; j++)
-                                        {
-                                            if (jatekter[i, j].Name == aktBabu.Name)
-                                            {
-                                                jatekter[i, j].Name = $"{i}_{j}";
-                                                jatekter[i, j].Image = null;
-                                                jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
-                                            }
-                                        }
-                                    }
-                                    aktBabu.Image = null;
-                                    aktBabu.Name = "";
-                                    startIndex++;
+                                    jatekter[i, j].Name = $"{i}_{j}";
+                                    jatekter[i, j].Image = null;
+                                    jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
                                 }
                             }
                         }
-                        //Jobb => bal átló ütés
-                        else if (jatekter[ujPozRow - 1, ujPozCol - 1].Image != null)
+
+                        aktBabu.Image = null;
+                        aktBabu.Name = "";
+                        startIndex++;
+                    }
+                    else if (aktBabuRow - ujPozRow == 2)
+                    {
+                        MessageBox.Show("Ilyen lépés nem lehetséges!");
+                    }
+                    //Bal => jobb átló ütés
+                    else if (jatekter[ujPozRow - 1, ujPozCol + 1].Image != null)
+                    {
+                        if (jatekter[aktBabuRow, aktBabuCol].Name.Split('_')[2] != jatekter[ujPozRow - 1, ujPozCol + 1].Name.Split('_')[2])
                         {
-                            if (jatekter[aktBabuRow, aktBabuCol].Name.Split('_')[2] != jatekter[ujPozRow - 1, ujPozCol - 1].Name.Split('_')[2])
+                            if (jatekter[ujPozRow, ujPozCol].Image == null)
                             {
-                                if (jatekter[ujPozRow, ujPozCol].Image == null)
+                                jatekter[ujPozRow + 1, ujPozCol - 1].Name = $"{Convert.ToString(ujPozRow + 1)}_{Convert.ToString(ujPozCol - 1)}";
+                                jatekter[ujPozRow + 1, ujPozCol - 1].Image = null;
+
+                                jatekter[ujPozRow, ujPozCol].Name = $"{ujPozRow}_{ujPozCol}_{szin[startIndex]}";
+                                jatekter[ujPozRow, ujPozCol].Image = aktBabu.Image;
+
+                                for (int i = 0; i < 8; i++)
                                 {
-                                    jatekter[ujPozRow + 1, ujPozCol + 1].Name = $"{Convert.ToString(ujPozRow + 1)}_{Convert.ToString(ujPozCol + 1)}";
-                                    jatekter[ujPozRow + 1, ujPozCol + 1].Image = null;
-
-                                    jatekter[ujPozRow, ujPozCol].Name = $"{ujPozRow}_{ujPozCol}_{szin[startIndex]}";
-                                    jatekter[ujPozRow, ujPozCol].Image = aktBabu.Image;
-
-                                    for (int i = 0; i < 8; i++)
+                                    for (int j = 0; j < 8; j++)
                                     {
-                                        for (int j = 0; j < 8; j++)
+                                        if (jatekter[i, j].Name == aktBabu.Name)
                                         {
-                                            if (jatekter[i, j].Name == aktBabu.Name)
-                                            {
-                                                jatekter[i, j].Name = $"{i}_{j}";
-                                                jatekter[i, j].Image = null;
-                                                jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
-                                            }
+                                            jatekter[i, j].Name = $"{i}_{j}";
+                                            jatekter[i, j].Image = null;
+                                            jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
                                         }
                                     }
-                                    aktBabu.Image = null;
-                                    aktBabu.Name = "";
-                                    startIndex++;
                                 }
+                                aktBabu.Image = null;
+                                aktBabu.Name = "";
+                                startIndex++;
                             }
                         }
-                        else
+                    }
+                    //Jobb => bal átló ütés
+                    else if (jatekter[ujPozRow - 1, ujPozCol - 1].Image != null)
+                    {
+                        if (jatekter[aktBabuRow, aktBabuCol].Name.Split('_')[2] != jatekter[ujPozRow - 1, ujPozCol - 1].Name.Split('_')[2])
                         {
-                            MessageBox.Show($"Ide nem léphetsz!");
+                            if (jatekter[ujPozRow, ujPozCol].Image == null)
+                            {
+                                jatekter[ujPozRow + 1, ujPozCol + 1].Name = $"{Convert.ToString(ujPozRow + 1)}_{Convert.ToString(ujPozCol + 1)}";
+                                jatekter[ujPozRow + 1, ujPozCol + 1].Image = null;
+
+                                jatekter[ujPozRow, ujPozCol].Name = $"{ujPozRow}_{ujPozCol}_{szin[startIndex]}";
+                                jatekter[ujPozRow, ujPozCol].Image = aktBabu.Image;
+
+                                for (int i = 0; i < 8; i++)
+                                {
+                                    for (int j = 0; j < 8; j++)
+                                    {
+                                        if (jatekter[i, j].Name == aktBabu.Name)
+                                        {
+                                            jatekter[i, j].Name = $"{i}_{j}";
+                                            jatekter[i, j].Image = null;
+                                            jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
+                                        }
+                                    }
+                                }
+                                aktBabu.Image = null;
+                                aktBabu.Name = "";
+                                startIndex++;
+                            }
                         }
                     }
                     else
                     {
-                        MessageBox.Show("Ilyen lépés nem lehetséges!");
+                        MessageBox.Show($"Ide nem léphetsz!");
                     }
-                }
-                else
-                {
-                    MessageBox.Show("Visszafele nem léphetsz");
                 }
             }
             
