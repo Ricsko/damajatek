@@ -28,12 +28,12 @@ namespace damajatek_KKG_SZR_LA
         private void start_BTN_Click(object sender, EventArgs e)
         {
             nevellenorzes();
-            pictureBox1.Visible = false;
+            
         }
-
+        
         private void nevellenorzes()
         {
-            /*nev1 = jatekos1_TBOX.Text;
+            nev1 = jatekos1_TBOX.Text;
             nev2 = jatekos2_TBOX.Text;
             if(nev1 == "" || nev2 == "")
             {
@@ -41,9 +41,9 @@ namespace damajatek_KKG_SZR_LA
             }
             else
             {
-                
-            }*/
-            palyageneralas();
+                palyageneralas();
+            }
+            
         }
 
         private void palyageneralas()
@@ -104,6 +104,10 @@ namespace damajatek_KKG_SZR_LA
                         aktBabu.Name = "";
                         jatekter[row, col].BackColor = Color.FromArgb(255, 216, 176);
                     }
+                    else if(aktBabu.Name != "")
+                    {
+                        MessageBox.Show($"Már van kiválasztott bábú! \n Kattints újra a kiválasztott bábúdra!");
+                    }
                     else
                     {
                         aktBabu.Name = klikkelt.Name;
@@ -129,57 +133,142 @@ namespace damajatek_KKG_SZR_LA
                 int ujPozRow = Convert.ToInt32(klikkelt.Name.Split('_')[0]);
                 int ujPozCol = Convert.ToInt32(klikkelt.Name.Split('_')[1]);
 
-                if (startIndex%2==0 && ujPozRow > aktBabuRow)
+
+                //Fekete léptetés - átló
+                if (startIndex % 2 == 0 && ujPozRow > aktBabuRow)
                 {
-                    klikkelt.Image = aktBabu.Image;
-                    klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
+                    MessageBox.Show($"oszlop  {Convert.ToInt32(aktBabuCol - ujPozCol)} \n sor {aktBabuRow - ujPozRow} ");
 
-
-                    for (int i = 0; i < 8; i++)
+                    if (aktBabuRow - ujPozRow == -1 && aktBabuCol - ujPozCol == -1 || aktBabuCol - ujPozCol == 1)
                     {
-                        for (int j = 0; j < 8; j++)
+                        klikkelt.Image = aktBabu.Image;
+                        klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
+
+                        for (int i = 0; i < 8; i++)
                         {
-                            if (jatekter[i, j].Name == aktBabu.Name)
+                            for (int j = 0; j < 8; j++)
                             {
-                                jatekter[i, j].Name = $"{i}_{j}";
-                                jatekter[i, j].Image = null;
-                                jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
+                                if (jatekter[i, j].Name == aktBabu.Name)
+                                {
+                                    jatekter[i, j].Name = $"{i}_{j}";
+                                    jatekter[i, j].Image = null;
+                                    jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
+                                }
                             }
                         }
+
+                        aktBabu.Image = null;
+                        aktBabu.Name = "";
+                        startIndex++;
+                        
+                    }
+                    else if (jatekter[aktBabuRow, aktBabuCol].Name.Split('_')[2] != jatekter[ujPozRow - 1,ujPozCol - 1].Name.Split('_')[2])
+                    {
+                        if(jatekter[ujPozRow - 1, ujPozCol - 1].Image != null)
+                        {
+                            jatekter[ujPozRow - 1, ujPozCol - 1].Name = $"{Convert.ToString(ujPozRow - 1)}_{Convert.ToString(ujPozCol - 1)}";
+                            jatekter[ujPozRow - 1, ujPozCol - 1].Image = null;
+
+                            jatekter[ujPozRow, ujPozCol].Name = $"{ujPozRow}_{ujPozCol}_{szin[startIndex]}";
+                            jatekter[ujPozRow, ujPozCol].Image = aktBabu.Image;
+
+                            for (int i = 0; i < 8; i++)
+                            {
+                                for (int j = 0; j < 8; j++)
+                                {
+                                    if (jatekter[i, j].Name == aktBabu.Name)
+                                    {
+                                        jatekter[i, j].Name = $"{i}_{j}";
+                                        jatekter[i, j].Image = null;
+                                        jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
+                                    }
+                                }
+                            }
+                            aktBabu.Image = null;
+                            aktBabu.Name = "";
+                            startIndex++;
+                        }
+
+                    }
+                    else if(jatekter[aktBabuRow, aktBabuCol].Name.Split('_')[2] != jatekter[ujPozRow + 1, ujPozCol - 1].Name.Split('_')[2])
+                    {
+                        if (jatekter[ujPozRow - 1, ujPozCol + 1].Image != null)
+                        {
+                            jatekter[ujPozRow - 1, ujPozCol + 1].Name = $"{Convert.ToString(ujPozRow - 1)}_{Convert.ToString(ujPozCol + 1)}";
+                            jatekter[ujPozRow - 1, ujPozCol + 1].Image = null;
+
+                            jatekter[ujPozRow, ujPozCol].Name = $"{ujPozRow}_{ujPozCol}_{szin[startIndex]}";
+                            jatekter[ujPozRow, ujPozCol].Image = aktBabu.Image;
+
+                            for (int i = 0; i < 8; i++)
+                            {
+                                for (int j = 0; j < 8; j++)
+                                {
+                                    if (jatekter[i, j].Name == aktBabu.Name)
+                                    {
+                                        jatekter[i, j].Name = $"{i}_{j}";
+                                        jatekter[i, j].Image = null;
+                                        jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
+                                    }
+                                }
+                            }
+                            aktBabu.Image = null;
+                            aktBabu.Name = "";
+                            startIndex++;
+                        }
+                       
                     }
 
-                    aktBabu.Image = null;
-                    aktBabu.Name = "";
-                    startIndex++;
+
+                    else
+                    {
+                        MessageBox.Show($"Ide nem léphetsz!");
+                    }
+
                 }
+
+                //Fehér léptetés - átló
                 else if (startIndex % 2 != 0 && ujPozRow < aktBabuRow)
                 {
-                    klikkelt.Image = aktBabu.Image;
-                    klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
 
-
-                    for (int i = 0; i < 8; i++)
+                    if (aktBabuRow - ujPozRow == 1 && aktBabuCol - ujPozCol == 1 || aktBabuCol - ujPozCol == -1)
                     {
-                        for (int j = 0; j < 8; j++)
+                        klikkelt.Image = aktBabu.Image;
+                        klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
+
+
+
+                        for (int i = 0; i < 8; i++)
                         {
-                            if (jatekter[i, j].Name == aktBabu.Name)
+                            for (int j = 0; j < 8; j++)
                             {
-                                jatekter[i, j].Name = $"{i}_{j}";
-                                jatekter[i, j].Image = null;
-                                jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
+                                if (jatekter[i, j].Name == aktBabu.Name)
+                                {
+                                    jatekter[i, j].Name = $"{i}_{j}";
+                                    jatekter[i, j].Image = null;
+                                    jatekter[i, j].BackColor = Color.FromArgb(255, 216, 176);
+                                }
                             }
                         }
-                    }
 
-                    aktBabu.Image = null;
-                    aktBabu.Name = "";
-                    startIndex++;
+                        aktBabu.Image = null;
+                        aktBabu.Name = "";
+                        startIndex++;
+
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Ide nem léphetsz!");
+                    }
                 }
                 else
                 {
                     MessageBox.Show("Vissza nem tudsz lépni!");
                 }
             }
+            
+            
+
             //AKTUÁLIS SZÍN
             startIndex = startIndex % 2;
             MessageBox.Show(aktszin);
@@ -193,6 +282,8 @@ namespace damajatek_KKG_SZR_LA
             jatekos2_TBOX.Visible = false;
             start_BTN.Visible = false;
             szabalyok_BTN.Visible = false;
+            pictureBox1.Visible = false;
+            richTextBox1.Visible = false;
         }
 
         private void babuk()
