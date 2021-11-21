@@ -96,19 +96,26 @@ namespace damajatek_KKG_SZR_LA
 
             if (klikkelt.Image != null)
             {
-                if (klikkelt.Name == aktBabu.Name)
+                if(aktszin == klikkelt.Name.Split('_')[2])
                 {
-                    aktBabu.Image = null;
-                    aktBabu.Name = "";
-                    jatekter[col, row].BackColor = Color.FromArgb(255, 216, 176);
+                    if (klikkelt.Name == aktBabu.Name)
+                    {
+                        aktBabu.Image = null;
+                        aktBabu.Name = "";
+                        jatekter[col, row].BackColor = Color.FromArgb(255, 216, 176);
+                    }
+                    else
+                    {
+                        aktBabu.Name = klikkelt.Name;
+                        aktBabu.Image = klikkelt.Image;
+                        jatekter[col, row].BackColor = Color.Green;
+                    }
                 }
                 else
                 {
-                    aktBabu.Name = klikkelt.Name;
-                    aktBabu.Image = klikkelt.Image;
-                    jatekter[col, row].BackColor = Color.Green;
+                    MessageBox.Show("Nem te vagy a soron lévő játékos!");
                 }
-                
+
             }
             else if (aktBabu.Image == null)
             {
@@ -118,7 +125,7 @@ namespace damajatek_KKG_SZR_LA
             {
                 klikkelt.Image = aktBabu.Image;
                 klikkelt.Name += $"_{aktBabu.Name.Split('_')[2]}";
-                
+
                 for (int i = 0; i < 8; i++)
                 {
                     for (int j = 0; j < 8; j++)
@@ -131,7 +138,7 @@ namespace damajatek_KKG_SZR_LA
                         }
                     }
                 }
-                
+
                 aktBabu.Image = null;
                 aktBabu.Name = "";
                 startIndex++;
